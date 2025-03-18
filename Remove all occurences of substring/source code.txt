@@ -1,0 +1,16 @@
+char* removeOccurrences(char* s, char* part) {
+    int len_s = strlen(s), len_part = strlen(part);
+    int i, j = 0; // `j` represents the end of the modified string
+
+    for (i = 0; s[i]; i++) {
+        s[j++] = s[i]; // Append character to "stack"
+
+        // Check if last `len_part` characters match `part`
+        if (j >= len_part && strncmp(s + j - len_part, part, len_part) == 0) {
+            j -= len_part; // Remove last `len_part` characters
+        }
+    }
+
+    s[j] = '\0'; // Null-terminate the result
+    return s;
+}
