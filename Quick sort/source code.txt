@@ -1,0 +1,62 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+void swap(int* a,int* b)
+{
+    int temp=*a;
+    *a=*b;
+    *b=temp;
+}
+
+int partiationArray(int a[],int low,int high)
+{
+    int pivot=a[low];
+    int i=low;
+    int j=high;
+    while(i<j)
+    {
+        while(a[i]<=pivot && i<=high-1)
+            i++;
+        while(a[j]>pivot && j>=low+1)
+            j--;
+        if(i<j)
+            swap(&a[i],&a[j]);
+    }
+    swap(&a[low],&a[j]);
+    return j;
+}
+
+void quickSort(int a[],int low,int high)
+{
+    if(low<high)
+    {
+        int pIndex=partiationArray(a,low,high);
+        quickSort(a,low,pIndex-1);
+        quickSort(a,pIndex+1,high);
+    }
+}
+
+void main()
+{
+    clock_t start,end;
+    double timeTaken;
+    int n;
+    printf("Enter the size of the Array\n");
+    scanf("%d",&n);
+    int a[n];
+    printf("enter the elements of the array\n");
+    for(int i=0;i<n;i++)
+    {
+        a[i]=rand();
+    }
+    start=clock();
+    quickSort(a,0,n-1);
+    end=clock();
+    timeTaken=(double)(end-start)/CLOCKS_PER_SEC;
+    printf("\nsorted array\n");
+    for(int i=0;i<n;i++)
+    {
+        printf(" %d ",a[i]);
+    }
+    printf("\ntime Taken :%f",timeTaken);
+}
