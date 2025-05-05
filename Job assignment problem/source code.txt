@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <limits.h>
+
+int n, cost[10][10];
+int minCost = INT_MAX;
+int assigned[10] = {0};
+
+// Swap utility
+void swap(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+// Calculate total cost of a given assignment
+void calculate(int jobs[]) {
+    int total = 0;
+    for (int i = 0; i < n; i++) {
+        total += cost[i][jobs[i]];  // i-th person assigned jobs[i]
+    }
+    if (total < minCost)
+        minCost = total;
+}
+
+// Generate all job permutations
+void permute(int jobs[], int l, int r) {
+    if (l == r) {
+        calculate(jobs);
+        return;
+    }
+
+    for (int i = l; i <= r; i++) {
+        swap(&jobs[l], &jobs[i]);
+        permute(jobs, l + 1, r);
+        swap(&jobs[l], &jobs[i]); // backtrack
+    }
+}
+
+int main() {
+    printf("Enter number of jobs/persons: ");
+    scanf("%d", &n);
+
+    printf("Enter the cost matrix (%d x %d):\n", n, n);
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            scanf("%d", &cost[i][j]);
+
+    int jobs[10];
+    for (int i = 0; i < n; i++)
+        jobs[i] = i;
+
+    permute(jobs, 0, n - 1);
+
+    printf("Minimum assignment cost = %d\n", minCost);
+    return 0;
+}
